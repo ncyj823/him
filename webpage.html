@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>For Tejas</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #8B0000;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      overflow-x: hidden;
+    }
+    h1 {
+      font-size: 3em;
+      margin-top: 2rem;
+    }
+    p {
+      font-size: 1.3em;
+      max-width: 700px;
+      margin: 1rem auto;
+      line-height: 1.6;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2em;
+      background-color: white;
+      color: #8B0000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 2rem;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .heart {
+      font-size: 3em;
+      animation: heartbeat 1s infinite;
+    }
+    .love-note {
+      display: none;
+      font-size: 2em;
+      margin-top: 2rem;
+      animation: fadeIn 2s forwards;
+    }
+    .hearts {
+      display: none;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(139, 0, 0, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      font-size: 5em;
+      color: white;
+      animation: fadeIn 1s forwards;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Music -->
+  <audio id="bgMusic">
+    <source src="music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Heart at top -->
+  <div class="heart">♥</div>
+
+  <h1>Hi Tejas</h1>
+  <p>Hi Tejas,<br>
+  I know I’ve made mistakes, and I can see you're not as happy with me lately — and that breaks my heart. But I want you to know how deeply I care and how much I want to grow for you, for us.<br><br>
+  When we met in 2022, I never imagined how important you would become to me. Now, I can’t picture my life without you in it.<br><br>
+  Please give me another chance to make things right — to love you the way you truly deserve.<br>
+  Will you be mine again? My boyfriend, my heart, my everything?<br><br>
+  I promise this time, I won’t let you down.</p>
+
+  <h2>Will you be mine?</h2>
+
+  <button id="yesButton">Yes</button>
+
+  <div class="love-note" id="loveNote">You just made me the happiest girl ever, Tejas!</div>
+  <div class="hearts" id="hearts">I love you ♥</div>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <script>
+    // Confetti Logic
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width = window.innerWidth;
+    let H = canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    // Set up confetti particles
+    for (let i = 0; i < 150; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H - H,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 100 + 100,
+        color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+        tilt: Math.random() * 10 - 10
+      });
+    }
+
+    // Draw confetti
+    function drawConfetti() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x + p.tilt, p.y, p.r, p.r);
+        ctx.closePath();
+      });
+      updateConfetti();
+    }
+
+    // Update confetti
+    function updateConfetti() {
+      particles.forEach(p => {
+        p.y += 2;
+        p.tilt = Math.sin(p.y * 0.05) * 10;
+        if (p.y > H) {
+          p.y = -10;
+          p.x = Math.random() * W;
+        }
+      });
+    }
+
+    // Start confetti
+    function startConfetti() {
+      function animate() {
+        drawConfetti();
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    // Function triggered on clicking Yes
+    document.getElementById('yesButton').onclick = function() {
+      // Play music only on button click
+      const audio = document.getElementById('bgMusic');
+      audio.play();
+      
+      // Display love note and hearts
+      document.getElementById('loveNote').style.display = 'block';
+      document.getElementById('hearts').style.display = 'flex';
+      
+      // Start confetti effect
+      startConfetti();
+
+    }
+    document.getElementById('playMusic').onclick = function () {
+      const music = document.getElementById('bgMusic');
+      music.play().then(() => {
+        alert("Music is playing!");
+      }).catch((err) => {
+        console.error("Music couldn't play:", err);
+        alert("Music couldn't play. Check browser settings.");
+      });
+    };
+
+  </script>
+</body>
+</html>
